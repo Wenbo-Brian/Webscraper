@@ -1,0 +1,23 @@
+from bs4 import BeautifulSoup
+from lxml import html
+import requests
+import xlwt
+
+for i in range(0,50):
+    url = 'http://18.206.38.144:8000/random_company'
+    get_resp = requests.get(url, headers = {
+        "Host": "18.206.38.144:8000",
+        "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:86.0) Gecko/20100101 Firefox/86.0"
+    })
+    soup = BeautifulSoup(get_resp.content, 'html.parser')
+    tree = html.fromstring(get_resp.content)
+    
+    name = tree.xpath("//ol/li[contains(text(), 'Name')]/text()")
+    purpose = tree.xpath("//ol/li[contains(text(), 'Purpose')]/text()")
+    
+    merge = name + purpose
+    content_str = " ".join(merge)+ "\n"
+    
+    with open("/Users/yuwenbo/Desktop/FE595 Wenbo Yu.txt", "a") as f:
+        f.write(content_str)
+    print(content_str)
